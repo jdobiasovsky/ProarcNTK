@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Implementation-Title: ProArc Web Application
+Implementation-Version: 3.2
+Archiver-Version: Plexus Archiver
+Built-By: honza
+Implementation-Build: 20161121223439, revision 7cc130187ddd8c411b05d66
+ 637a807612afd7086
+Implementation-Vendor-Id: cz.cas.lib.proarc
+Created-By: Apache Maven 3.3.9
+Build-Jdk: 1.8.0_111
+Implementation-URL: https://github.com/proarc/proarc/wiki
+

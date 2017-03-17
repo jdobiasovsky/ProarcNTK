@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <listener>
+        <listener-class>cz.cas.lib.proarc.webapp.server.EditorServletConfiguration</listener-class>
+    </listener>
+
+    <!-- async initialization -->
+    <filter>
+        <filter-name>bootstrap</filter-name>
+        <filter-class>cz.cas.lib.proarc.webapp.server.EditorServletConfiguration</filter-class>
+    </filter>
+
+    <!--  Authenticate filter -->
+    <filter>
+        <filter-name>auth</filter-name>
+        <filter-class>cz.cas.lib.proarc.authentication.ProarcAuthFilter</filter-class>
+        <init-param>
+            <param-name>realm</param-name>
+            <param-value>Protected</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>bootstrap</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>auth</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--  login servlet -->
+    <servlet>
+        <servlet-name>proarcservlet</servlet-name>
+        <servlet-class>cz.cas.lib.proarc.authentication.ProarcHTTPServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>proarcservlet</servlet-name>
+        <url-pattern>/proarclogin</url-pattern>
+    </servlet-mapping>
+
+    <!--REST-->
+    <servlet>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>
+                cz.cas.lib.proarc.webapp.server.rest
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                cz.cas.lib.proarc.webapp.server.rest.JacksonProvider,
+                org.glassfish.jersey.jackson.JacksonFeature,
+                org.glassfish.jersey.media.multipart.MultiPartFeature
+            </param-value>
+        </init-param>
+<!--        <init-param>
+            <param-name>jersey.config.server.provider.scanning.recursive</param-name>
+            <param-value>false</param-value>
+        </init-param>-->
+
+        <load-on-startup>1</load-on-startup>
+
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey Web Application</servlet-name>
+        <url-pattern>/rest/v1/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <resource-ref>
+        <res-ref-name>jdbc/proarc</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
+    
+</web-app>
